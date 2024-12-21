@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body class="bg-blue-950">
+   
+
+<div class="h-screen flex flex-col justify-center items-center ">
+    <div class="flex justify-center mb-6">
+        <h1 class="text-3xl font-bold text-white text-center lg:mt-14 md:mt-10 mt-5">Simon's Game</h1>
+    </div>
+ 
+    <div class="flex justify-center  lg:mb-20 md:mb-[60px] mb-5 ">
+        <h2 class="text-3xl font-bold text-white text-center lg:mt-3 md:mt-1 mt-1  lg:mb-0  md:mb-2 mb-2 ">Press any key to start Game</h2>
+    </div>
+   
+       <div class="flex flex-row">
+          <button class="blue bg-blue-600 h-36 w-36 m-2 rounded-lg border-black border-4 cursor-pointer"id="blue">one</button>
+          <button class="orange bg-orange-400 h-36 w-36 m-2 rounded-lg border-black border-4 cursor-pointer"id="orange">two</button>
+       </div>
+
+        <div class="flex flex-row ">
+           <button class="green bg-green-600 h-36 w-36 m-2 rounded-lg border-black border-4 cursor-pointer"id="green">Three</button>
+           <button class="red bg-red-600 h-36 w-36 m-2 rounded-lg border-black border-4 cursor-pointer"id="red">Four</button>
+    
+        </div>  
+     
+</div> 
+
+
+
+</body>
+
+<script>
+
+let game_sequence=[];
+let user_seqence=[];
+let all_buttons=document.querySelectorAll('button');
+let btn_colors=["blue","orange","green","red"]
+let h2=document.querySelector('h2')
+let level=0
+let started=false;
+
+
+function startGame() {
+  if (!started) {
+    started = true;
+    h2.innerText = `Level ${level}`;
+    levelup();
+  }
+}
+
+
+all_buttons.forEach ((btn)=>{
+    btn.addEventListener("click",()=>{
+    
+        user_flash_btn(btn)
+        
+        check_sequence() 
+    
+    })
+})
+
+
+function levelup(){
+    level++;
+    started = false;
+    game_flash_btn()
+
+}
+
+function user_flash_btn(btn){
+    h2.innerText=`level ${level}`;
+   btn.classList.add("bg-white");
+    setTimeout (()=>{
+     
+        btn.classList.remove("bg-white");
+       
+    }
+    ,100)
+       let user_color = btn.getAttribute("id");
+       user_seqence.push(user_color)
+    
+}
+
+
+
+function check_sequence(){
+
+
+   
+
+    let id=user_seqence.length - 1;
+    if (user_seqence[id] === game_sequence[id]){
+        if (user_seqence.length === game_sequence.length){
+          
+            levelup();
+            user_seqence=[];
+       
+        }
+    }
+    else{
+        h2.innerHTML=` GAME OVER...! Your score : ${level}  <br> Press any key to restart the game`
+        reset()
+    } 
+}
+
+
+function game_flash_btn(){
+    if (started==false){
+        started=true;
+        
+        let random_id=Math.floor(Math.random()*4);
+        let random_color=btn_colors[random_id];
+        let random_btn=document.querySelector(`.${random_color}`)
+        h2.innerText=`level ${level}`;
+        random_btn.classList.add("bg-white");
+        setTimeout (()=>{
+     
+        random_btn.classList.remove("bg-white");
+        },100)
+        game_sequence.push(random_color)
+        console.log(game_sequence)
+        }
+}
+document.addEventListener("keypress",startGame)
+
+
+function reset(){
+    level=0;
+    started = false;
+    user_seqence=[];
+    game_sequence=[];
+}
+
+
+</script>
+</html>
+
+
+
+
